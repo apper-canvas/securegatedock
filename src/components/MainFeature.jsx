@@ -206,7 +206,7 @@ function MainFeature({ showHelp }) {
         }}
       >
         {/* Overlay to ensure text readability */}
-        <div className="absolute inset-0 bg-white/40 dark:bg-surface-900/70 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-white/20 dark:bg-surface-900/50"></div>
         
         {/* Additional decorative elements */}
         <div className="absolute top-0 left-1/3 w-2/3 h-1/2 bg-primary/20 dark:bg-primary/10 rounded-full blur-3xl transform -translate-y-1/2"></div>
@@ -215,7 +215,7 @@ function MainFeature({ showHelp }) {
 
       {/* Main card */}
       <motion.div 
-        className="card-neu bg-white/70 dark:bg-surface-800/50 p-8 md:p-10 relative z-0 border border-surface-200/50 dark:border-surface-700/50 backdrop-blur-md"
+        className="card-neu bg-white/70 dark:bg-surface-800/50 p-8 md:p-10 relative z-0 border border-surface-200/50 dark:border-surface-700/50"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
@@ -247,8 +247,8 @@ function MainFeature({ showHelp }) {
         </div>
 
         {/* Title */}
-        <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold">
+        <div className="text-center mb-10">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-primary-dark dark:text-primary-light text-shadow">
             {authMode === 'login' ? 'Welcome back' : 'Create an account'}
           </h2>
           <p className="text-surface-600 dark:text-surface-400 mt-2">
@@ -533,7 +533,7 @@ function MainFeature({ showHelp }) {
 
           {/* Switch auth mode link */}
           <div className="text-center mt-6">
-            <button
+            <button 
               type="button"
               onClick={switchAuthMode}
               className="text-primary dark:text-primary-light hover:underline text-sm font-medium"
@@ -559,5 +559,17 @@ function MainFeature({ showHelp }) {
     </div>
   );
 }
+
+// Add text shadow utility class for better readability against background image
+const style = document.createElement('style');
+style.textContent = `
+  .text-shadow {
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+  }
+  .dark .text-shadow {
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
+`;
+document.head.appendChild(style);
 
 export default MainFeature;
