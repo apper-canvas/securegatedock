@@ -71,6 +71,8 @@ function MainFeature({ showHelp }) {
     if (/[0-9]/.test(password)) strength += 1;
     if (/[^A-Za-z0-9]/.test(password)) strength += 1;
 
+    // Check for common patterns that weaken passwords
+    if (/^[a-zA-Z]+\d+$/.test(password) || /^\d+[a-zA-Z]+$/.test(password)) strength -= 1;
     // Set the final strength (0-5 scale)
     const normalizedStrength = Math.min(5, strength);
     setPasswordStrength(normalizedStrength);
@@ -387,7 +389,52 @@ function MainFeature({ showHelp }) {
             )}
             
             {/* Password strength meter (only for signup) */}
-            {authMode === 'signup' && formData.password && !errors.password && (
+            <AnimatePresence>
+              {authMode === 'signup' && formData.password && (
+              <div className="mt-2">
+                <div className="w-full h-1.5 bg-surface-200 dark:bg-surface-700 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full ${getPasswordStrengthColor()} transition-all duration-300 ease-in-out`}
+                    style={{ width: `${(passwordStrength / 5) * 100}%` }}
+                  ></div>
+                </div>
+                <div className="mt-1 flex justify-between items-center">
+                  <p className="text-xs flex items-center">
+                    <InfoIcon className="h-3 w-3 mr-1" />
+                    Password strength: <span className={`ml-1 font-medium ${
+                      passwordStrength <= 1 ? 'text-red-500' : 
+                      passwordStrength === 2 ? 'text-orange-500' :
+                      passwordStrength === 3 ? 'text-yellow-500' :
+                      passwordStrength === 4 ? 'text-blue-500' :
+                      'text-green-500'
+                    }`}>{passwordMessage}</span>
+                  </p>
+                </div>
+                
+                {/* Password improvement suggestions */}
+                {passwordStrength < 3 && formData.password.length > 0 && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-2 text-xs p-2 bg-surface-100 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-lg"
+                  >
+                    <p className="font-medium mb-1 text-surface-700 dark:text-surface-300">Suggestions to improve your password:</p>
+                    <ul className="list-disc pl-5 text-surface-600 dark:text-surface-400 space-y-1">
+                      {formData.password.length < 8 && <li>Make it at least 8 characters long</li>}
+                      {!/[A-Z]/.test(formData.password) && <li>Add uppercase letters</li>}
+                      {!/[a-z]/.test(formData.password) && <li>Add lowercase letters</li>}
+                      {!/[0-9]/.test(formData.password) && <li>Add numbers</li>}
+                      {!/[^A-Za-z0-9]/.test(formData.password) && <li>Add special characters (e.g., !@#$%^&*)</li>}
+                    </ul>
+                  </motion.div>
+                )}
+              </div>
+              )}
+            </AnimatePresence>
+
+            {/* Previous implementation (now replaced with enhanced version above) */}
+            {/* {authMode === 'signup' && formData.password && !errors.password && (
               <div className="mt-2">
                 <div className="w-full h-1.5 bg-surface-200 dark:bg-surface-700 rounded-full overflow-hidden">
                   <div 
@@ -400,7 +447,7 @@ function MainFeature({ showHelp }) {
                   Password strength: <span className="ml-1 font-medium">{passwordMessage}</span>
                 </p>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Confirm Password Input (only for signup) */}
