@@ -8,14 +8,14 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#3b82f6',
-          light: '#60a5fa',
-          dark: '#2563eb'
+          DEFAULT: '#7e22ce', // Purple-700
+          light: '#a855f7', // Purple-500
+          dark: '#6b21a8'  // Purple-800
         },
         secondary: {
-          DEFAULT: '#10b981',
-          light: '#34d399',
-          dark: '#059669'
+          DEFAULT: '#8b5cf6', // Violet-500
+          light: '#a78bfa', // Violet-400
+          dark: '#7c3aed'  // Violet-600
         },
         accent: '#f97316',
         surface: {

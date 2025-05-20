@@ -197,16 +197,25 @@ function MainFeature({ showHelp }) {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl">
-      {/* Background gradient decoration */}
-      <div className="absolute -z-10 top-0 left-0 w-full h-full">
-        <div className="absolute top-0 left-1/3 w-2/3 h-1/2 bg-primary/10 dark:bg-primary/5 rounded-full blur-3xl transform -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-1/3 w-2/3 h-1/2 bg-secondary/10 dark:bg-secondary/5 rounded-full blur-3xl transform translate-y-1/2"></div>
+    <div className="relative overflow-hidden rounded-2xl">      
+      {/* Background image from provided URL */}
+      <div 
+        className="absolute -z-10 top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdECPjuZug4KdJweUmNQ-PkCAlOh9ro9ewNg&s')",
+        }}
+      >
+        {/* Overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-white/40 dark:bg-surface-900/70 backdrop-blur-sm"></div>
+        
+        {/* Additional decorative elements */}
+        <div className="absolute top-0 left-1/3 w-2/3 h-1/2 bg-primary/20 dark:bg-primary/10 rounded-full blur-3xl transform -translate-y-1/2"></div>
+        <div className="absolute bottom-0 right-1/3 w-2/3 h-1/2 bg-secondary/20 dark:bg-secondary/10 rounded-full blur-3xl transform translate-y-1/2"></div>
       </div>
 
       {/* Main card */}
       <motion.div 
-        className="card-neu dark:bg-surface-800/50 p-8 md:p-10 relative z-0 border border-surface-200 dark:border-surface-700"
+        className="card-neu bg-white/70 dark:bg-surface-800/50 p-8 md:p-10 relative z-0 border border-surface-200/50 dark:border-surface-700/50 backdrop-blur-md"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
