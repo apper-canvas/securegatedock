@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/authSlice';
 import { getIcon } from '../utils/iconUtils';
 
 // Icons
@@ -11,6 +14,8 @@ const EyeIcon = getIcon('eye');
 const EyeOffIcon = getIcon('eye-off');
 const ArrowRightIcon = getIcon('arrow-right');
 const CheckCircleIcon = getIcon('check-circle');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 const AlertTriangleIcon = getIcon('alert-triangle');
 const RefreshCwIcon = getIcon('refresh-cw');
 const InfoIcon = getIcon('info');
@@ -64,10 +69,18 @@ function MainFeature({ showHelp }) {
     // Length check
     if (password.length >= 8) strength += 1;
     if (password.length >= 12) strength += 1;
-
-    // Character variety checks
-    if (/[A-Z]/.test(password)) strength += 1;
-    if (/[a-z]/.test(password)) strength += 1;
+      try {
+        // Simulate successful authentication
+        dispatch(login({
+          email: formData.email,
+          name: formData.email.split('@')[0]
+        }));
+        toast.success(`Welcome back, ${formData.email}!`);
+        resetForm();
+        navigate('/training-schedule');
+      } catch (error) {
+        toast.error('Authentication failed. Please try again.');
+      }
     if (/[0-9]/.test(password)) strength += 1;
     if (/[^A-Za-z0-9]/.test(password)) strength += 1;
 
@@ -75,9 +88,18 @@ function MainFeature({ showHelp }) {
     if (/^[a-zA-Z]+\d+$/.test(password) || /^\d+[a-zA-Z]+$/.test(password)) strength -= 1;
     // Set the final strength (0-5 scale)
     const normalizedStrength = Math.min(5, strength);
-    setPasswordStrength(normalizedStrength);
-
-    // Set message based on strength
+      try {
+        // Simulate successful registration
+        dispatch(login({
+          email: formData.email,
+          name: formData.email.split('@')[0]
+        }));
+        toast.success(`Account created for ${formData.email}!`);
+        resetForm();
+        navigate('/training-schedule');
+      } catch (error) {
+        toast.error('Registration failed. Please try again.');
+      }
     const messages = [
       'Very weak',
       'Weak',

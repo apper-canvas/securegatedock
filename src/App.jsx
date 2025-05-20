@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import TrainingSchedule from './pages/TrainingSchedule';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -54,6 +57,13 @@ function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />} />
+          <Route 
+            path="/training-schedule" 
+            element={
+              <ProtectedRoute>
+                <TrainingSchedule isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+              </ProtectedRoute>
+            } />
           <Route path="*" element={<NotFound isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />} />
         </Routes>
       </AnimatePresence>
