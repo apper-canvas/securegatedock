@@ -53,7 +53,7 @@ function TrainingSchedule({ isDarkMode, toggleDarkMode }) {
     
     setCompletedWorkouts([...completedWorkouts, workoutId]);
     dispatch(completeWorkout(workoutId));
-    toast.success('Workout completed! Great job! 💪');
+    toast.success('Workout completed! Great job!');
   };
   
   const getDifficultyLabel = (level) => {

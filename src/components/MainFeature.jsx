@@ -2,12 +2,22 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
+import { getIcon } from '../utils/iconUtils';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/authSlice';
 import { getIcon } from '../utils/iconUtils';
 
 // Icons
 const UserIcon = getIcon('user');
+const MailIcon = getIcon('mail');
+const DumbbellIcon = getIcon('dumbbell');
+const TargetIcon = getIcon('target');
+const ZapIcon = getIcon('zap');
+const ShieldIcon = getIcon('shield');
+const CheckCircleIcon = getIcon('check-circle');
+const EyeIcon = getIcon('eye');
+const EyeOffIcon = getIcon('eye-off');
+const LockIcon = getIcon('lock');
 const MailIcon = getIcon('mail');
 const LockIcon = getIcon('lock');
 const EyeIcon = getIcon('eye');
@@ -17,7 +27,7 @@ const CheckCircleIcon = getIcon('check-circle');
 const AlertTriangleIcon = getIcon('alert-triangle');
 const RefreshCwIcon = getIcon('refresh-cw');
 const InfoIcon = getIcon('info');
-const HelpCircleIcon = getIcon('help-circle');
+const strengthMessages = ["Very Weak", "Weak", "Fair", "Good", "Strong"];
 
 function MainFeature({ showHelp }) {
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
@@ -26,7 +36,7 @@ function MainFeature({ showHelp }) {
   
   const [formData, setFormData] = useState({
     email: '',
-    username: '',
+  const [name, setName] = useState(''); 
     password: '',
     confirmPassword: '',
   });
@@ -131,7 +141,7 @@ function MainFeature({ showHelp }) {
       newErrors.password = 'Password is required';
       isValid = false;
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+                  {isLogin ? 'Welcome Back' : 'Join SecureGate'}
       isValid = false;
     }
 
@@ -146,15 +156,18 @@ function MainFeature({ showHelp }) {
       }
     }
 
-    setErrors(newErrors);
+                    <div className="relative">
+                      <MailIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-surface-400" />
+                      <input
     setFormValid(isValid);
     return isValid;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+                        className="input-field pl-10"
   };
+                    </div>
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -163,15 +176,18 @@ function MainFeature({ showHelp }) {
   const switchAuthMode = () => {
     setAuthMode(authMode === 'login' ? 'signup' : 'login');
   };
-
+                  <div className="relative">
+                    <MailIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-surface-400" />
+                    <input
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!validateForm()) {
       toast.error("Please fix the form errors before submitting");
       return;
-    }
+                      className="input-field pl-10"
     
+                  </div>
     setIsSubmitting(true);
     
     // Simulate API call
@@ -180,6 +196,7 @@ function MainFeature({ showHelp }) {
         // Simulate successful authentication
         dispatch(login({
           email: formData.email,
+                    <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-surface-400" />
           name: formData.email.split('@')[0]
         }));
         
@@ -188,14 +205,14 @@ function MainFeature({ showHelp }) {
       } else {
           toast.success(`Account created for ${formData.email}!`);
       }
-      
+                      className="input-field pl-10 pr-10"
         resetForm();
         navigate('/training-schedule');
       } catch (error) {
         toast.error('Authentication failed. Please try again.');
       } finally {
         setIsSubmitting(false);
-      }
+                      {showPassword ? <EyeOffIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
     }, 1500);
   };
 
@@ -204,7 +221,10 @@ function MainFeature({ showHelp }) {
       'bg-red-500', // Very weak
       'bg-orange-500', // Weak
       'bg-yellow-500', // Fair
-      'bg-blue-500', // Good
+                        <span className="text-sm flex items-center">
+                          {strengthMessages[Math.min(normalizedStrength, 4)]}
+                          {normalizedStrength >= 4 && <DumbbellIcon className="ml-1 h-4 w-4 text-green-500" />}
+                        </span>
       'bg-green-500', // Strong
       'bg-green-600' // Very strong
     ];
@@ -218,8 +238,11 @@ function MainFeature({ showHelp }) {
         className="absolute -z-10 top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdECPjuZug4KdJweUmNQ-PkCAlOh9ro9ewNg&s')",
-        }}
-      >
+                            <span className="mr-2 flex-shrink-0">
+                              {criterion.regex.test(password) ? 
+                                <CheckCircleIcon className="h-3 w-3 text-green-500" /> : 
+                                <div className="h-3 w-3 rounded-full border border-surface-400"></div>
+                              }
         {/* Overlay to ensure text readability */}
         <div className="absolute inset-0 bg-white/20 dark:bg-surface-900/50"></div>
         
@@ -282,18 +305,18 @@ function MainFeature({ showHelp }) {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <MailIcon className="h-5 w-5 text-surface-500" />
-              </div>
+                <div className="space-y-2 flex flex-col items-center">
+                  <TargetIcon className="h-8 w-8 text-primary" />
               <input
                 id="email"
                 name="email"
-                type="email"
-                value={formData.email}
+                <div className="space-y-2 flex flex-col items-center">
+                  <ZapIcon className="h-8 w-8 text-primary" />
                 onChange={handleChange}
                 className={`input-field pl-10 ${
                   errors.email ? 'border-red-500 dark:border-red-500' : ''
-                }`}
-                placeholder="your.email@example.com"
+                <div className="space-y-2 flex flex-col items-center">
+                  <ShieldIcon className="h-8 w-8 text-primary" />
               />
               {showHelp && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
