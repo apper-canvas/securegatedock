@@ -75,15 +75,15 @@ function MainFeature({ showHelp }) {
 
     // Check for common patterns that weaken passwords
     if (/^[a-zA-Z]+\d+$/.test(password) || /^\d+[a-zA-Z]+$/.test(password)) strength -= 1;
-    // Set the final strength (0-5 scale)
-    const normalizedStrength = Math.min(5, strength);
-    // Check for common patterns that weaken passwords
-    if (/^[a-zA-Z]+\d+$/.test(password) || /^\d+[a-zA-Z]+$/.test(password)) strength -= 1;
     
     // Set the final strength (0-5 scale)
     const normalizedStrength = Math.max(0, Math.min(5, strength));
     setPasswordStrength(normalizedStrength);
     
+    const messages = [
+      'Very weak',
+      'Weak',
+      'Fair',
       'Good',
       'Strong',
       'Very strong'
