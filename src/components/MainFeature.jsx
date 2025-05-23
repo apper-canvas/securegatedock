@@ -14,8 +14,6 @@ const EyeIcon = getIcon('eye');
 const EyeOffIcon = getIcon('eye-off');
 const ArrowRightIcon = getIcon('arrow-right');
 const CheckCircleIcon = getIcon('check-circle');
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 const AlertTriangleIcon = getIcon('alert-triangle');
 const RefreshCwIcon = getIcon('refresh-cw');
 const InfoIcon = getIcon('info');
@@ -23,6 +21,9 @@ const HelpCircleIcon = getIcon('help-circle');
 
 function MainFeature({ showHelp }) {
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -69,18 +70,6 @@ function MainFeature({ showHelp }) {
     // Length check
     if (password.length >= 8) strength += 1;
     if (password.length >= 12) strength += 1;
-      try {
-        // Simulate successful authentication
-        dispatch(login({
-          email: formData.email,
-          name: formData.email.split('@')[0]
-        }));
-        toast.success(`Welcome back, ${formData.email}!`);
-        resetForm();
-        navigate('/training-schedule');
-      } catch (error) {
-        toast.error('Authentication failed. Please try again.');
-      }
     if (/[0-9]/.test(password)) strength += 1;
     if (/[^A-Za-z0-9]/.test(password)) strength += 1;
 
@@ -88,28 +77,30 @@ function MainFeature({ showHelp }) {
     if (/^[a-zA-Z]+\d+$/.test(password) || /^\d+[a-zA-Z]+$/.test(password)) strength -= 1;
     // Set the final strength (0-5 scale)
     const normalizedStrength = Math.min(5, strength);
-      try {
-        // Simulate successful registration
-        dispatch(login({
-          email: formData.email,
-          name: formData.email.split('@')[0]
-        }));
-        toast.success(`Account created for ${formData.email}!`);
-        resetForm();
-        navigate('/training-schedule');
-      } catch (error) {
-        toast.error('Registration failed. Please try again.');
-      }
-    const messages = [
-      'Very weak',
-      'Weak',
-      'Fair',
+    // Check for common patterns that weaken passwords
+    if (/^[a-zA-Z]+\d+$/.test(password) || /^\d+[a-zA-Z]+$/.test(password)) strength -= 1;
+    
+    // Set the final strength (0-5 scale)
+    const normalizedStrength = Math.max(0, Math.min(5, strength));
+    setPasswordStrength(normalizedStrength);
+    
       'Good',
       'Strong',
       'Very strong'
     ];
     setPasswordMessage(messages[normalizedStrength]);
   }, [formData.password]);
+
+  const resetForm = () => {
+    setFormData({
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+    });
+    setErrors({});
+    setShowPassword(false);
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -184,24 +175,26 @@ function MainFeature({ showHelp }) {
     setIsSubmitting(true);
     
     // Simulate API call
-    setTimeout(() => {
+    setTimeout(async () => {
+      try {
+        // Simulate successful authentication
+        dispatch(login({
+          email: formData.email,
+          name: formData.email.split('@')[0]
+        }));
+        
       if (authMode === 'login') {
-        toast.success("Login successful! This is a simulated response.");
+          toast.success(`Welcome back, ${formData.email}!`);
       } else {
-        toast.success("Account created successfully! This is a simulated response.");
+          toast.success(`Account created for ${formData.email}!`);
       }
-      setIsSubmitting(false);
       
-      // Reset form after successful submission
-      if (authMode === 'signup') {
-        setAuthMode('login');
-      } else {
-        setFormData({
-          email: '',
-          username: '',
-          password: '',
-          confirmPassword: '',
-        });
+        resetForm();
+        navigate('/training-schedule');
+      } catch (error) {
+        toast.error('Authentication failed. Please try again.');
+      } finally {
+        setIsSubmitting(false);
       }
     }, 1500);
   };
