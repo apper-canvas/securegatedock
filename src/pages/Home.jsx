@@ -76,16 +76,8 @@ function Home({ isDarkMode, toggleDarkMode }) {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.1 }}
               >
-                Welcome to <span className="text-primary">SecureGate</span>
+                Z Fighter Training
               </motion.h1>
-              <motion.p 
-                className="text-lg md:text-xl text-surface-600 dark:text-surface-400 max-w-2xl mx-auto"
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                Experience our authentication system demo with a clean, modern interface
-              </motion.p>
             </div>
             
             {/* Main Interactive Feature Component */}
