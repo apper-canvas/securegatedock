@@ -107,6 +107,7 @@ function TrainingSchedule({ isDarkMode, toggleDarkMode }) {
                 ) : (
                   <MoonIcon className="h-5 w-5 text-surface-600" />
                 )}
+
               </button>
               
               <Link to="/" className="p-2 rounded-full hover:bg-surface-200 dark:hover:bg-surface-800 transition-colors">
